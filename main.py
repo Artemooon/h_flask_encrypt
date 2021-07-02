@@ -11,7 +11,7 @@ fernet_key = Fernet(key)
 def encrypt():
     string = request.args.get('string','Test')
     #Encrypting our string
-    token = f.encrypt(bytes(string, 'utf-8'))
+    token = fernet_key.encrypt(bytes(string, 'utf-8'))
 
     is_encrypt = True
     return render_template('index.html', encrypted_string = str(token), is_encrypt = is_encrypt)
@@ -22,9 +22,9 @@ def decrypt():
     try:
         string = request.args.get('string',None)
         if not string:
-            return 'Invalid'
+            return 'Invalid data in decrypt parameter'
         #Decrypting our string    
-        token = f.decrypt(bytes(string, 'utf-8'))
+        token = fernet_key.decrypt(bytes(string, 'utf-8'))
         is_encrypt = False
         return render_template('index.html', decrypted_string = str(token),is_encrypt = is_encrypt)
     except:
